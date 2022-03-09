@@ -1,0 +1,1 @@
+moja.cli --config growth_mai.json --config growth_mai_libs.json --config_provider growth_mai_provider.json

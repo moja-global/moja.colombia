@@ -1,0 +1,39 @@
+{
+    "Providers": {
+        "Postgres": {
+            "type": "LibpqPostgreSQL",
+            "library": "moja.modules.libpq",
+            "connectionstring": "postgresql://postgres:admin@postgres/colombia"
+        },        
+        "FlintTiled": {
+            "type": "RasterTiledGDAL",
+            "library": "moja.modules.gdal",
+            "tileLatSize": 1.0,
+            "tileLonSize": 1.0,
+            "blockLatSize": 0.1,
+            "blockLonSize": 0.1,
+            "cellLatSize": 0.00025,
+            "cellLonSize": 0.00025,
+            "layers": [
+                {
+                    "name": "departments",
+                    "layer_type": "GridLayer",
+                    "layer_data": "UInt8",
+                    "layer_prefix": "",
+                    "layer_path": "data/input/Departamentos.tiff",
+                    "metadata_required": false,
+                    "nodata": 255
+                },
+                {
+                    "name": "forest_types",
+                    "layer_type": "GridLayer",
+                    "layer_data": "UInt16",
+                    "layer_prefix": "",
+                    "layer_path": "data/input/Forestales_2020.tiff",
+                    "metadata_required": false,
+                    "nodata": 65535
+                }
+            ]
+        }
+    }
+}

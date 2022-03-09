@@ -1,0 +1,281 @@
+{
+    "LocalDomain": {
+        "type": "spatial_tiled",
+        "start_date": "2000/01/01",
+        "end_date": "2050/12/31",
+        "sequencer_library": "internal.flint",
+        "sequencer": "CalendarAndEventFlintDataSequencer",
+        "simulateLandUnit": "simulateLandUnit",
+        "landUnitBuildSuccess": "landUnitBuildSuccess",
+        "landscape": {
+            "iteration_type": "BlockIndex",
+            "num_threads": 0,
+            "provider": "FlintTiled",
+            "blocks": [
+                {
+                    "tile_index": 30707,
+                    "block_index": 21
+                }
+            ]
+        },
+        "operationManager": {
+            "name": "Simple",
+            "use_kahan": false,
+            "allow_zero_result_transfers": false
+        },
+        "settings": {
+            "stats_on": true,
+            "stats_description": "growth mai simulation",
+            "stats_databasename": "./data/output/results/growth_mai_run.db",
+            "drop_and_create_tables": false,
+            "reset_variables": true
+        }
+    },
+    "Pools": [
+        "initialValues",
+        "atmosphereCM",
+        "aboveGroundCM",
+        "belowGroundCM"
+    ],
+    "Variables": [
+        {
+            "localDomainId": 1
+        },
+        {
+            "simulationUnitData": {
+                "flintdata": {
+                    "library": "moja.modules.growth_mai",
+                    "type": "SimulationUnitData"
+                }
+            }
+        },
+        {
+            "spatialLocationInfo": {
+                "flintdata": {
+                    "library": "internal.flint",
+                    "type": "SpatialLocationInfo"
+                }
+            }
+        },
+        {
+            "runStatistics": {
+                "flintdata": {
+                    "library": "moja.modules.growth_mai",
+                    "type": "RunStatistics",
+                    "settings": {}
+                }
+            }
+        },
+        {
+            "simulateLandUnit": true
+        },
+        {
+            "landUnitBuildSuccess": true
+        },
+        {
+            "landUnitArea": 1.0
+        },
+        {
+            "forest_types": {
+                "transform": {
+                    "library": "moja.modules.growth_mai",
+                    "type": "ForestTypesTransform"
+                }
+            }
+        },
+        {
+            "eventqueue": {
+                "flintdata": {
+                    "library": "internal.flint",
+                    "type": "EventQueue"
+                }
+            }
+        },
+        {
+            "forest_exists": false
+        },
+        {
+            "forest": null
+        },
+        {
+            "forest_type_records": {
+                "transform": {
+                    "library": "internal.flint",
+                    "provider": "Postgres",
+                    "queryString": "SELECT id, 'growth_mai.ForestType' as type, name, density, root_to_shoot, carbon_frac, rotation_length, mai, expansion_factor FROM import.forest_type;",
+                    "type": "SQLQueryTransform"
+                }
+            }
+        },
+        {
+            "department": {
+                "transform": {
+                    "data_id": "departments",
+                    "library": "internal.flint",
+                    "provider": "FlintTiled",
+                    "type": "LocationIdxFromFlintDataTransform"
+                }
+            }
+        },
+        {
+            "forest_type_id": {
+                "transform": {
+                    "data_id": "forest_types",
+                    "library": "internal.flint",
+                    "provider": "FlintTiled",
+                    "type": "LocationIdxFromFlintDataTransform"
+                }
+            }
+        },
+        {
+            "forest_establishment": {
+                "transform": {
+                    "library": "internal.flint",
+                    "provider": "Postgres",
+                    "queryString": "SELECT gid as id, cast(año_estab as integer) as establishment_year, tipo_de_cr_id as forest_type_id FROM import.forestales_2020 WHERE gid = {var:forest_type_id};",
+                    "type": "SQLQueryTransform"
+                }
+            }
+        },
+        {
+            "reporting_classifiers": {
+                "transform": {
+                    "library": "internal.flint",
+                    "type": "CompositeTransform",
+                    "vars": [
+                        "department"
+                    ],
+                    "allow_nulls": true
+                }
+            }
+        },
+        {
+            "run_statistics": {
+                "flintdata": {
+                    "library": "moja.modules.growth_mai",
+                    "type": "RunStatistics",
+                    "settings": {}
+                }
+            }
+        }
+    ],
+    "Modules": {
+        "TransactionManagerEndOfStepModule": {
+            "library": "internal.flint",
+            "order": 1
+        },
+        "CalendarAndEventFlintDataSequencer": {
+            "library": "internal.flint",
+            "order": 2
+        },
+        "BuildLandUnitModule": {
+            "library": "moja.modules.growth_mai",
+            "order": 3
+        },
+        "DisturbanceEventModule": {
+            "library": "moja.modules.growth_mai",
+            "order": 4
+        },
+        "ForestGrowthModule": {
+            "library": "moja.modules.growth_mai",
+            "order": 5
+        },
+        "AggregatorStockStep": {
+            "enabled": false,
+            "library": "internal.flint",
+            "order": 6
+        },
+        "AggregatorLandUnit": {
+            "enabled": true,
+            "library": "moja.modules.growth_mai",
+            "order": 7,
+            "settings": {
+                "output_month_12_only": true,
+                "tileIndex_dim_enabled": false,
+                "blockIndex_dim_enabled": false,
+                "cellIndex_dim_enabled": false,
+                "do_stock": true,
+                "do_run_statistics": true,
+                "reporting_classifier_set": "reporting_classifiers"
+            }
+        },
+        "AggregatorError": {
+            "enabled": true,
+            "library": "moja.modules.growth_mai",
+            "order": 8,
+            "settings": {
+                "log_errors": true,
+                "log_errors_max_number": 32000,
+                "log_errors_per_block": true
+            }
+        },
+        "LandUnitSQLiteWriter": {
+            "enabled": true,
+            "library": "moja.modules.growth_mai",
+            "order": 9,
+            "settings": {
+                "databasename": "./data/output/results/dbs/output.db"
+            }
+        },
+        "WriteVariableGeotiff": {
+            "enabled": true,
+            "library": "moja.modules.gdal",
+            "order": 10,
+            "settings": {
+                "output_path": "./data/output/results/spatial_outputs/grids",
+                "use_indexes_for_folder_name": true,
+                "items": [
+                    {
+                        "enabled": true,
+                        "data_name": "atmosphereCM",
+                        "pool_name": "atmosphereCM",
+                        "variable_data_type": "float",
+                        "on_notification": "OutputStep",
+                        "output_annual_only": true,
+                        "nodata_value": -9999,
+                        "apply_area_adjustment": true
+                    },
+                    {
+                        "enabled": true,
+                        "data_name": "aboveGroundCM",
+                        "pool_name": "aboveGroundCM",
+                        "variable_data_type": "float",
+                        "on_notification": "OutputStep",
+                        "output_annual_only": true,
+                        "nodata_value": -9999,
+                        "apply_area_adjustment": true
+                    },
+                    {
+                        "enabled": true,
+                        "data_name": "belowGroundCM",
+                        "pool_name": "belowGroundCM",
+                        "variable_data_type": "float",
+                        "on_notification": "OutputStep",
+                        "output_annual_only": true,
+                        "nodata_value": -9999,
+                        "apply_area_adjustment": true
+                    },
+                    {
+                        "enabled": true,
+                        "data_name": "simulate_land_unit",
+                        "variable_name": "simulateLandUnit",
+                        "variable_data_type": "UInt8",
+                        "on_notification": "TimingShutdown",
+                        "nodata_value": 255,
+                        "apply_area_adjustment": true
+                    },
+                    {
+                        "enabled": true,
+                        "data_name": "errors",
+                        "variable_name": "spatialLocationInfo",
+                        "property_name": "errorCode",
+                        "variable_data_type": "UInt8",
+                        "on_notification": "Error",
+                        "nodata_value": 255,
+                        "apply_area_adjustment": true
+                    }
+                ]
+            }
+        }
+    }
+}

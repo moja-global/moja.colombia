@@ -1,0 +1,19 @@
+{
+    "Libraries": {
+        "moja.modules.gdal": {
+            "library": "moja.modules.gdald.dll",
+            "path": "%MOJA_LIBS%",
+            "type": "external"
+        },
+        "moja.modules.growth_mai": {
+            "library": "moja.modules.growth_maid.dll",
+            "path": "%LOCAL_LIBS%",
+            "type": "external"
+        },
+		"moja.modules.libpq": {
+            "library": "moja.modules.libpqd.dll",
+            "path": "%MOJA_LIBS%",
+            "type": "external"
+        }
+    }
+}

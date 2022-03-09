@@ -1,0 +1,1 @@
+docker run -ti --rm --network=moja_net -v $(pwd):/home/moja/run_env moja/mai.colombia:bionic bash

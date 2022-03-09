@@ -1,0 +1,154 @@
+{
+    "LocalDomain": {
+        "type": "point",
+        "start_date": "2010/01/01",
+        "end_date": "2050/12/31",
+        "sequencer_library": "internal.flint",
+        "sequencer": "CalendarAndEventFlintDataSequencer",
+        "simulateLandUnit": "simulateLandUnit",
+        "landUnitBuildSuccess": "landUnitBuildSuccess",
+        "operationManager": {
+            "name": "Simple",
+            "use_kahan": false,
+            "allow_zero_result_transfers": false
+        },
+        "settings": {
+            "stats_on": true,
+            "stats_description": "growth mai simulation",
+            "stats_databasename": "./data/output/results/growth_mai_run.db",
+            "drop_and_create_tables": false,
+            "reset_variables": true
+        }
+    },
+    "Pools": [
+        "initialValues",
+        "atmosphereCM",
+        "aboveGroundCM",
+        "belowGroundCM"
+    ],
+    "Variables": [
+        {
+            "localDomainId": 1
+        },
+        {
+            "simulateLandUnit": true
+        },
+        {
+            "landUnitBuildSuccess": true
+        },
+        {
+            "landUnitArea": 1.0
+        },
+        {
+            "forest_types": {
+                "flintdata": {
+                    "library": "moja.modules.growth_mai",
+                    "type": "ForestTypeList",
+                    "settings": {
+                        "items": [
+                            {
+                                "id": 3,
+                                "type": "growth_mai.ForestType",
+                                "name": "Acacia mangium",
+                                "density": 0.55,
+                                "root_to_shoot": 0.24,
+                                "carbon_frac": 0.47,
+                                "rotation_length": 15,
+                                "mai": 18.0,
+                                "expansion_factor": 1.5
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "eventqueue": {
+                "flintdata": {
+                    "library": "internal.flint",
+                    "type": "EventQueue",
+                    "settings": {
+                        "events": [
+                            {
+                                "date": {
+                                    "$date": "2015/01/01"
+                                },
+                                "id": 1,
+                                "type": "growth_mai.PlantEvent",
+                                "name": "Plant Acacia mangium",
+                                "forest_type_id": 3
+                            },
+                            {
+                                "date": {
+                                    "$date": "2030/01/01"
+                                },
+                                "id": 2,
+                                "type": "growth_mai.ClearEvent",
+                                "name": "Clear Acacia mangium"
+                            },
+                            {
+                                "date": {
+                                    "$date": "2031/01/01"
+                                },
+                                "id": 3,
+                                "type": "growth_mai.PlantEvent",
+                                "name": "Plant Acacia mangium",
+                                "forest_type_id": 3
+                            },
+                            {
+                                "date": {
+                                    "$date": "2045/01/01"
+                                },
+                                "id": 4,
+                                "type": "growth_mai.ClearEvent",
+                                "name": "Clear Acacia mangium"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "forest_exists": false
+        },
+        {
+            "forest": null
+        }
+    ],
+    "Modules": {
+        "TransactionManagerEndOfStepModule": {
+            "library": "internal.flint",
+            "order": 1
+        },
+        "CalendarAndEventFlintDataSequencer": {
+            "library": "internal.flint",
+            "order": 2
+        },
+        "DisturbanceEventModule": {
+            "library": "moja.modules.growth_mai",
+            "order": 3
+        },
+        "ForestGrowthModule": {
+            "library": "moja.modules.growth_mai",
+            "order": 4
+        },
+        "OutputerStream": {
+            "library": "internal.flint",
+            "order": 6,
+            "settings": {
+                "output_filename": "Forest_Point_Stock.csv",
+                "output_to_screen": true,
+                "output_info_header": true
+            }
+        },
+        "OutputerStreamFlux": {
+            "library": "internal.flint",
+            "order": 7,
+            "settings": {
+                "output_filename": "Forest_Point_Flux.csv",
+                "output_to_screen": false,
+                "output_info_header": true
+            }
+        }
+    }
+}

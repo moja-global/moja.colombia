@@ -1,0 +1,7 @@
+{
+    "Libraries": {
+        "moja.modules.gdal": "external",
+		"moja.modules.libpq": "external",
+        "moja.modules.growth_mai": "external"
+    }
+}
