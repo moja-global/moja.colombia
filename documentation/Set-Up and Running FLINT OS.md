@@ -29,7 +29,7 @@ SQLite studio [https://sqlitestudio.pl/index.rvt](https://sqlitestudio.pl)
 
 4. **Mac**: Generally will download to your 'Downloads' folder. Move this to your Desktop by dragging it in a Finder window. Once on    your desktop, double click or right click and use the Archive Utility. This should UnZip it in to the ‘MAI.Colombia’ folder.
 
-5. Rename ‘MAI.Colombia-main’ to ‘MAI.Colombia’
+5. Rename ‘moja.colombia-master’ to ‘MAI.Colombia’
    
    - This will match the file names in the GitHub repository (C:\MAI.Colombia)
 
@@ -130,7 +130,7 @@ Note: If you do not have administrative privileges you may not be able to set th
     - Change the directory to the one you created by writing: 
     
     ```
-    cd ~/Desktop/MAI.Colombia
+    cd ~/Desktop/MAI.Colombia/run_envs
     ```
     
     - Still in Terminal, pull the container by writing: 
@@ -138,14 +138,35 @@ Note: If you do not have administrative privileges you may not be able to set th
     ```
     docker pull mojaglobal/mai.colombia
     ```
+    - Open a new terminal by going to 'Shell'>'New Window'>'Basic' and enter the following:
+        
+    ```
+    cd ~/Desktop/MAI.Colombia/run_envs
+    ```    
+    Then:
+    ```
+    docker-compose up
+    ```
+    **- Hit enter** – Download takes several minutes. You will need to wait for 5-10 minutes before moving on to the next step.
     
-    **- Hit enter** – Download takes several minutes. 
+15. Go to a web browser and navigate to http://localhost:5050     Note: If this page doesn't load, it is due to the pull request not being complete, wait for       10 minutes and try again. If the issue still occurs, check on the previous processes in the terminal to ensure they ran and succeeded. 
 
-15. Congratulations! You’ve now set up the FLINT environment – Time to test it!
+    - Login to the pgAdmin 4 database network via the login page with:
+            - USERNAME: moja@colombia.org
+            - PASSWORD: admin
+
+    - Once logged in, navigate to the left-hand side menu and right-click Servers. From this dropdown, select Create > Server...
+    - Now fill out the server infomation:
+           In the 'General' tab, enter "colombia" into the Name field
+           In the 'Connection' tab, enter "postgres" into the Host name/address field.
+           In the 'Connection' tab, enter "postgres" into the Username field
+           In the 'Connection' tab, enter "admin" into the password field
+
+16. Congratulations! You’ve now set up the FLINT environment – Time to test it!
 
 ## Step 5 – Run FLINT
 
-16. In the PowerShell Window: **(See step 17 for Mac)**
+17. In the PowerShell Window: **(See step 18 for Mac)**
     
     - Write: 
     
@@ -175,21 +196,19 @@ Note: If you do not have administrative privileges you may not be able to set th
     
     b. Note: this will take some time (10-20 minutes). 
 
-17. **Mac** In the Terminal Window, still in ~/Desktop/moja.MAI.Colombia/run_env:
+18. **Mac** In the Terminal Window, still in ~/Desktop/moja.MAI.Colombia/run_envs:
     
     - Write: 
       
       ```
-      docker run --remove  --rm -ti -v ~/Desktop/MAI.Colombia/run_env:/tmp/moja_runenv mojaglobal/mai.colombia:latest bash
+      docker run --remove --rm --network=moja_net -ti -v ~/Desktop/MAI.Colombia/run_envs:/tmp/moja_runenv mojaglobal/mai.colombia:latest bash
       ```
       
       **- Hit Enter**
       
       This runs a shell within the container. 
     
-    - Change the directory
-    
-    - Write:
+    - Change the directory by entering:
     
     ```
     cd /tmp/moja_runenv
@@ -199,10 +218,16 @@ Note: If you do not have administrative privileges you may not be able to set th
     
     - If you want to see the files in the container, you can write* ls* to list them.
 
-18. Write: 
+    - Now run the build script by entering:
+
+    ```
+    bash ./build.sh
+    ```
+
+19. Once complete write: 
     
     ```
-    moja.cli --config  growth_mai.json --config growth_mai_libs.json --config_provider growth_mai_provider.json
+    moja.cli --config  growth_mai_test_block.json --config growth_mai_libs.json --config_provider growth_mai_provider.json
     ```
     
     **- Hit Enter**
@@ -211,15 +236,15 @@ Note: If you do not have administrative privileges you may not be able to set th
 
 ![image alt text](images/image_9.png)
 
-19. Congratulations! You’re running the FLINT!
+20. Congratulations! You’re running the FLINT!
     
     a. Note: it will not let you enter anything until the run is complete.
     
-    b. Once the FLINT has run, an Output folder will appear in the Data folder you created (under MAI.Colombia, and include spatial and database outputs
+    b. Once the FLINT has run, an Output folder will appear in the Data folder you created (under MAI.Colombia and will include spatial and database outputs)
 
 ## Step 6 – View Output data
 
-20. This step shows you the commands needed to build a single raster for each output or time step of each output. We have used forestStemCM as the illustrative example. You should already be within the FLINT docker shell.  Write:
+21. This step shows you the commands needed to build a single raster for each output or time step of each output. We have used forestStemCM as the illustrative example. You should already be within the FLINT docker shell.  Write:
     
     ```
     python3 merge_geotiffs.py
@@ -248,18 +273,14 @@ Note: If you do not have administrative privileges you may not be able to set th
     
     a. When you use QGIS for the first time open; QGIS Desktop
     
-    b. Open the virtual raster (.vrt) from `C:\MAI.Colombia` 
+    b. Open the raster output (.tif) from `C:\MAI.Colombia` 
     **Mac:** `~/Desktop/MAI.Colombia`
     
         i. Select the drop down menu under *C:\ **(Mac: Home)*
-        ii. Select the folder* C:\MAI.Colombia*
-        iii. Select *forestStemCM_12.vrt*
+        ii. Select the folder* Desktop/MAI.Colombia/run_envs/data/output/results/spatial_outputs/grids/aboveGroundCM*
+        iii. Select *aboveGroundCM_2000.tif*
     
-    c. This will show you the Spatial outputs form the Run![image alt text](images/image_10.png)![image alt text](images/image_11.png)
-
-![image alt text](images/image_12.png)
-
-![image alt text](images/image_13.png)
+    c. This will show you the Spatial outputs form the Run!
 
 23. To view the Database Output:
     
