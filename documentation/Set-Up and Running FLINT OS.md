@@ -96,10 +96,11 @@ Note: If you do not have administrative privileges you may not be able to set th
     
     b. Log into docker by;
     
-        i. Write:    
-        ```
-        docker login
-        ```
+      i. Write: 
+        
+      ```
+      docker login
+      ```
     
     **- Hit enter**
     
@@ -110,10 +111,6 @@ Note: If you do not have administrative privileges you may not be able to set th
         iii. Enter your Docker ID password
     
     **- Hit enter** (note, the password doesn’t appear on screen)
-
-![image alt text](images/image_7.png)
-
-![image alt text](images/image_8.png)
 
 12. Still in powershell, pull the container by writing: 
     
@@ -152,15 +149,15 @@ Note: If you do not have administrative privileges you may not be able to set th
 15. Go to a web browser and navigate to http://localhost:5050     Note: If this page doesn't load, it is due to the pull request not being complete, wait for       10 minutes and try again. If the issue still occurs, check on the previous processes in the terminal to ensure they ran and succeeded. 
 
     - Login to the pgAdmin 4 database network via the login page with:
-            - USERNAME: moja@colombia.org
-            - PASSWORD: admin
+        - USERNAME: moja@colombia.org
+        - PASSWORD: admin
 
     - Once logged in, navigate to the left-hand side menu and right-click Servers. From this dropdown, select Create > Server...
     - Now fill out the server infomation:
-           In the 'General' tab, enter "colombia" into the Name field
-           In the 'Connection' tab, enter "postgres" into the Host name/address field.
-           In the 'Connection' tab, enter "postgres" into the Username field
-           In the 'Connection' tab, enter "admin" into the password field
+      - In the 'General' tab, enter "colombia" into the Name field. 
+      - In the 'Connection' tab, enter "postgres" into the Host name/address field.
+      - In the 'Connection' tab, enter "postgres" into the Username field. 
+      - In the 'Connection' tab, enter "admin" into the password field. 
 
 16. Congratulations! You’ve now set up the FLINT environment – Time to test it!
 
@@ -233,8 +230,6 @@ Note: If you do not have administrative privileges you may not be able to set th
     **- Hit Enter**
     
     Note: this will take some time (10-20 minutes). 
-
-![image alt text](images/image_9.png)
 
 20. Congratulations! You’re running the FLINT!
     
