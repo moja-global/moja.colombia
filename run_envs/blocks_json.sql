@@ -9,6 +9,6 @@ FROM (
     'properties', to_jsonb(inputs) - 'gid' - 'geom'
   ) AS feature
   FROM (
-    SELECT * FROM import.departamentos_blocks
+    SELECT * FROM import.forestales_blocks
   ) inputs
 ) features;
