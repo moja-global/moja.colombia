@@ -1,0 +1,1 @@
+\COPY (SELECT gid as id, dptompio, nom_dep, nomb_mpio, sistema_si, nombre_cie, modo_siemb, fuente, area_has, "año_estab", tipo_de_cr, turno, bio_aerea, bio_total, tipo_de_cr_id FROM import.forestales_2020) TO 'forestales_2020.csv' DELIMITER ',' CSV HEADER;
